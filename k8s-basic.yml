@@ -34,6 +34,6 @@ spec:
       containers:
         - name: testk8s
           image: docker.io/pretorh/testk8s:first
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           - containerPort: 8080
