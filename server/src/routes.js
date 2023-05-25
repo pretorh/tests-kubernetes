@@ -7,7 +7,7 @@ export const app = express();
 app.use(morgan('combined'));
 
 function send(res, message) {
-  res.send({ host: hostname(), message, date: new Date() });
+  res.send({ host: hostname(), message, date: new Date(), version: process.env.VERSION });
 }
 
 app.get('/', (req, res) => {
