@@ -1,0 +1,7 @@
+{
+  "name": "server",
+  "version": "0.0.0",
+  "description": "basic express server for testing k8s",
+  "main": "index.js",
+  "license": "MIT"
+}
