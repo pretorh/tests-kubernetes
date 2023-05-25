@@ -14,4 +14,13 @@ app.get('/', (req, res) => {
   send(res, 'ok');
 });
 
+app.get('/slow', (req, res) => {
+  const t = req.query.t || 30;
+  const msec = +t * 1000;
+  logger.info(`starting slow request ${msec}msec`);
+  setTimeout(() => {
+    send(res, `slow (${msec} delay)`);
+  }, msec);
+});
+
 logger.debug('express app set up');
