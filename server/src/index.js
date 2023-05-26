@@ -19,8 +19,11 @@ function shutdown() {
   });
 }
 
-process.on('SIGTERM', shutdown);
-process.on('SIGINT', shutdown);
+if (process.env.VERSION) {
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
+  logger.info('graceful shutdown set up');
+}
 
 server.listen(8080, () => {
   logger.info('server start on port 8080');
