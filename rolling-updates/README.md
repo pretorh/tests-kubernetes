@@ -13,7 +13,10 @@ kubectl get pods
 
 A new pod is started while the previous is running, and the old one terminates afterwards.
 
-But because of the delay in the new pod, it is `Running`, but the server is not yet ready.
+States:
+- `Running` + `ContainerCreating`
+- `Terminating` + `Running`. But because of the delay in the new pod, the server is not yet ready and requests fail
+- `Running`
 
 Some of the requests fail
 
@@ -26,7 +29,15 @@ kubectl get pods
 
 The old pod keeps on running, new pods fail with `ErrImagePull`
 
-Reset to the initial version: `kubectl apply -f ../k8s-basic.yml`
+States:
+- `Running` + `ContainerCreating`
+- `Running` + `ErrImagePull`/`ImagePullBackOff`
+
+### Reset to the 2nd image
+
+States:
+- `Running` + `Terminating`
+- `Running`
 
 ## no rolling updates
 
@@ -46,3 +57,9 @@ kubectl get pods
 ```
 
 Service goes down while the new pod is created
+
+States:
+- `Terminating` + `ContainerCreating`: requests fail
+- `ContainerCreating`: requests fail
+- `Running`, but requests fail (startup delay in new pod)
+- `Running`
