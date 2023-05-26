@@ -1,0 +1,6 @@
+spec:
+  template:
+    spec:
+      containers:
+        - name: testk8s
+          image: docker.io/pretorh/testk8s:second
