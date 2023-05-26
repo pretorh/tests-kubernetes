@@ -7,7 +7,7 @@ Use `../utils/infinite-curl.sh <port>` to hit the service
 ## initial update
 
 ```
-sed 's|:first|:second|' ../k8s-basic.yml | kubectl apply -f -
+kubectl patch deployment express-server --patch-file ../k8s/images/v2.patch.yml
 kubectl get pods
 ```
 
@@ -23,7 +23,7 @@ Some of the requests fail
 ## invalid image
 
 ```
-sed 's|:first|:invalid-image-tag|' ../k8s-basic.yml | kubectl apply -f -
+kubectl patch deployment express-server --patch-file ../k8s/images/invalid-tag.patch.yml
 kubectl get pods
 ```
 
@@ -33,7 +33,11 @@ States:
 - `Running` + `ContainerCreating`
 - `Running` + `ErrImagePull`/`ImagePullBackOff`
 
-### Reset to the 2nd image
+## Reset to the 2nd image
+
+```
+kubectl patch deployment express-server --patch-file ../k8s/images/v2.patch.yml
+```
 
 States:
 - `Running` + `Terminating`
@@ -46,13 +50,15 @@ States:
 Set the rolling updates strategy to allow 1 unavailable, and 1 surge:
 
 ```
-cat ../k8s-basic.yml no-rolling-updates.yml | kubectl apply -f -
+kubectl patch deployment express-server --patch-file k8s-no-rolling-updates.patch.yml
 ```
 
 ### update once
 
+Set the rolling updates strategy to allow 1 unavailable and 1 surge
+
 ```
-sed 's|:first|:second|' ../k8s-basic.yml | kubectl apply -f -
+kubectl patch deployment express-server --patch-file ../k8s/images/v3.patch.yml
 kubectl get pods
 ```
 
