@@ -3,12 +3,19 @@ import { logger } from './utils/logger.js';
 import { app } from './routes.js';
 
 logger.info(`starting server in process ${process.pid}`);
+const delays = {
+  startup: process.env.STARTUP_DELAY || 5000,
+  shutdown: process.env.SHUTDOWN_DELAY || 5000,
+}
 
 const server = new Server(app);
 
-function shutdown() {
+async function shutdown() {
   logger.info('starting graceful shutdown');
   const timer = logger.startTimer();
+
+  logger.info(`wait ${delays.shutdown}ms before stoppin server (SHUTDOWN_DELAY)`);
+  await new Promise((resolve) => setTimeout(resolve, delays.shutdown));
 
   server.close(() => {
     logger.info('server stopped');
@@ -25,6 +32,11 @@ if (process.env.VERSION) {
   logger.info('graceful shutdown set up');
 }
 
-server.listen(8080, () => {
-  logger.info('server start on port 8080');
-});
+function start() {
+  server.listen(8080, () => {
+    logger.info('server start on port 8080');
+  });
+}
+
+logger.info(`wait ${delays.startup}ms before starting server (STARTUP_DELAY)`);
+setTimeout(start, delays.startup);
