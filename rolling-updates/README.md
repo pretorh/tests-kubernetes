@@ -69,3 +69,35 @@ States:
 - `ContainerCreating`: requests fail
 - `Running`, but requests fail (startup delay in new pod)
 - `Running`
+
+## maxUnavailable
+
+Set the rolling updates strategy to allow 0 unavailable and 2 surge
+
+```
+kubectl patch deployment express-server --patch-file k8s-rolling-updates.patch.yml
+kubectl patch deployment express-server --patch-file ../k8s/images/v2.patch.yml
+kubectl get pods
+```
+
+States:
+- `Running` + `ContainerCreating`: requests still work
+- `Terminating` + `Running`: requests fail
+- `Running`: requests work
+
+## maxUnavailable + readiness probe
+
+Add a readiness probe that waits for the pod to serve requests
+
+```
+kubectl patch deployment express-server --patch-file k8s-readiness.yml
+kubectl get pods
+# wait for new pod to start (old keeps serving)
+kubectl patch deployment express-server --patch-file ../k8s/images/v3.patch.yml
+kubectl get pods
+```
+
+States:
+- `Running` + `ContainerCreating`: requests still work
+- `Running` + `Running`: requests still work (on the old pod)
+- `Terminating` + `Running`: requests work (updated pod)

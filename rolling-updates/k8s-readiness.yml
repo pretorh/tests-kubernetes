@@ -1,0 +1,10 @@
+spec:
+  template:
+    spec:
+      containers:
+        - name: testk8s
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
