@@ -2,16 +2,33 @@
 
 Kubernetes scripts to test/play around with different setups
 
-## server
+## Setup
 
-basic setup:
+### docker images with node/exress server
 
-`server/build-docker.sh` to build and push docker images used in scripts
+Use `server/build-docker.sh` to build and push (need to change names) docker images used in scripts.
 
-## deployments
+All "versions" use the same code, but with different environment variables in the docker image to simulate changes
 
-create the basic deployment: `kubectl apply -f k8s-service.yml`
+### running in minikube
 
-## tests
+start:
+```
+minikube start
+minikube dashboard
+```
 
-separate tests/scenarios are in sub directories, with the own READMEs and setup scripts
+stop:
+```
+minikube stop
+```
+
+### base deployment and services
+
+Create the basic deployment: `kubectl apply -f k8s-basic.yml`
+
+Expose service in minikube: `minikube service express-server --url`
+
+## examples/tests
+
+Separate tests/scenarios are in sub directories, with the own READMEs and setup scripts
