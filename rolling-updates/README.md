@@ -55,8 +55,6 @@ kubectl patch deployment express-server --patch-file k8s-no-rolling-updates.patc
 
 ### update once
 
-Set the rolling updates strategy to allow 1 unavailable and 1 surge
-
 ```
 kubectl patch deployment express-server --patch-file ../k8s/images/v3.patch.yml
 kubectl get pods

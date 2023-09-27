@@ -31,4 +31,4 @@ Expose service in minikube: `minikube service express-server --url`
 
 ## examples/tests
 
-Separate tests/scenarios are in sub directories, with the own READMEs and setup scripts
+Separate tests/scenarios are in sub directories, with their own READMEs and setup scripts
