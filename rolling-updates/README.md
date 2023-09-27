@@ -4,6 +4,8 @@ Create the basic deployment and service (`kubectl apply -f ../k8s-basic.yml`)
 
 Use `../utils/infinite-curl.sh <port>` to hit the service
 
+Use `../utils/watch-pods.sh` to watch for pod statuses (instead of `kubectl get pods` below)
+
 ## initial update
 
 ```
