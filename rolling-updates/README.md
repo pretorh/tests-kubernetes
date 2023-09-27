@@ -70,7 +70,7 @@ States:
 
 ## maxUnavailable
 
-Set the rolling updates strategy to allow 0 unavailable and 2 surge
+Set the rolling updates strategy to allow 0 unavailable and 1 surge
 
 ```
 kubectl patch deployment express-server --patch-file k8s-rolling-updates.patch.yml
