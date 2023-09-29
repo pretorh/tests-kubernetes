@@ -23,4 +23,18 @@ app.get('/slow', (req, res) => {
   }, msec);
 });
 
+app.post('/crash', (req, res) => {
+  const t = req.query.t || 2;
+  const msec = +t * 1000;
+  logger.info(`setting up a crash after ${msec}ms`);
+
+  res.status(201);
+  send(res, `crash setup (${msec} delay)`);
+
+  setTimeout(() => {
+    logger.warn('crashing on purpose');
+    throw new Error('crashing after "/crash" route');
+  }, msec);
+});
+
 logger.debug('express app set up');
