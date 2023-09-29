@@ -30,3 +30,22 @@ curl -X POST "http://localhost:$PORT/stop"
 No changes in state, but the responses timeout.
 
 crash the server to recover: `curl -X POST "http://localhost:$PORT/crash?t=0"`
+
+## add a liveness probe to restart
+
+```sh
+kubectl patch deployment express-server --patch-file k8s-liveness.patch.yml
+```
+
+Wait for the deployment to finish (`../utils/wait-rollout.sh`), then:
+
+```sh
+curl -X POST "http://localhost:$PORT/stop"
+kubectl events deployments testk8s --watch
+```
+
+- `Running`: responses returned
+- `Running`: no responses
+- `Running`. events show "Liveness probe failed": no responses
+- `Running`. events show "Started container testk8s": no responses
+- `Running`: responses returned

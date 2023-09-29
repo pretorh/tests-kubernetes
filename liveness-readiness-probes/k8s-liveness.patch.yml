@@ -1,0 +1,10 @@
+spec:
+  template:
+    spec:
+      containers:
+        - name: testk8s
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            periodSeconds: 10
