@@ -5,8 +5,13 @@ import { logger } from './utils/logger.js';
 
 export const app = express();
 app.use(morgan('combined'));
+let responsesEnabled = true;
 
 function send(res, message) {
+  if (!responsesEnabled) {
+    logger.warn('responsesEnabled is false, not returning anything');
+    return;
+  }
   res.send({ host: hostname(), message, date: new Date(), version: process.env.VERSION });
 }
 
@@ -35,6 +40,12 @@ app.post('/crash', (req, res) => {
     logger.warn('crashing on purpose');
     throw new Error('crashing after "/crash" route');
   }, msec);
+});
+
+app.post('/stop', (req, res) => {
+  res.status(201);
+  send(res, 'setup responsesEnabled=false, no more responses will be returned');
+  responsesEnabled = false;
 });
 
 logger.debug('express app set up');
