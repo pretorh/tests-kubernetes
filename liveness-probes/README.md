@@ -1,4 +1,4 @@
-# Liveness, readiness probes
+# Liveness probes
 
 Create the basic deployment and service (`kubectl apply -f ../k8s-basic.yml`)
 
@@ -31,7 +31,7 @@ No changes in state, but the responses timeout.
 
 crash the server to recover: `curl -X POST "http://localhost:$PORT/crash?t=0"`
 
-## add a liveness probe to restart
+## add a liveness probe to restart failed containers
 
 ```sh
 kubectl patch deployment express-server --patch-file k8s-liveness.patch.yml
