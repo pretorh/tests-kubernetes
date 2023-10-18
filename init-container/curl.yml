@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  # based on examples from https://kubernetes.io/docs/concepts/workloads/pods/init-containers
+  name: simple-curl
+  labels:
+    app.kubernetes.io/name: SimpleCurlWithInitContainers
+spec:
+  containers:
+  - name: simple-curl-main-container
+    image: busybox:1.28
+    command: ['sh', '-c', 'echo The app is running! && stat /opt/express-server.json && cat /opt/express-server.json && echo "" && sleep 120']
+    volumeMounts:
+      - name: data
+        mountPath: /opt
+  initContainers:
+  - name: sleep
+    image: busybox:1.28
+    command: ['sleep', '30']
+  - name: wait-for-service
+    image: busybox:1.28
+    command: ['sh', '-c', "until nslookup express-server.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for express-server; sleep 2; done"]
+  - name: fetch-data
+    image: alpine
+    command: ['sh', '-c', 'apk add curl && curl http://express-server:8080/slow?t=30 > /opt/express-server.json']
+    volumeMounts:
+      - name: data
+        mountPath: /opt
+  volumes:
+    - name: data
+      emptyDir: {}
